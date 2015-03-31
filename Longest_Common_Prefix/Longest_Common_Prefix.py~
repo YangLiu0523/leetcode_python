@@ -1,0 +1,25 @@
+#!/usr/bin/python
+#Filename:Longest_Common_Prefix.py
+
+class Solution:
+    def longestCommonPrefix(self,strs):
+        stlength=0
+        for i in range(len(strs)):
+            stlength=max(len(strs[i]),stlength)
+        for i in range(stlength):
+            for j in range(1,len(strs)):
+                if strs[0][i]!=strs[j][i]:
+                    return strs[0][0:i]
+        '''
+        j=0
+        st=''
+        while True:
+            st=st+strs[1][j]
+            for i in range(len(strs)):
+                if strs[j][i]!=st[i]:
+                    return st[0:len(st)-1]
+            j=j+1
+        '''
+
+strs=['acv','acd']
+print Solution().longestCommonPrefix(strs)

@@ -8,3 +8,5 @@ class Solution:
             if target-num[index] in process:
                 return (process[target-num[index]]+1,index+1)
             process[num[index]]=index
+
+print Solution().twoSum([0,1],1)
