@@ -5,16 +5,19 @@ class Solution(object):
         :type target: int
         :rtype: List[List[int]]
         """
+        print '------target:',target
         result = []
-        candidates.sort()
         if candidates == []:
+            print '...........'
             return []
 
         for i in candidates:
+            print '---i:',i
             if i > target:
                 break
             elif i == target:
                 result.append([i])
+                continue
             temp_result = self.combinationSum(candidates, target - i)
             for j in range(len(temp_result)):
                 temp_result[j].append(i)
@@ -22,6 +25,7 @@ class Solution(object):
                 if not temp_result[j] in result:
                     result.append(temp_result[j])
 
+        print '------end'
         return result
 
 if __name__ == '__main__':
