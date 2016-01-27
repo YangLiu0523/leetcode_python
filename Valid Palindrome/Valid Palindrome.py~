@@ -1,0 +1,21 @@
+class Solution(object):
+    def isPalindrome(self, s):
+        """
+        :type s: str
+        :rtype: bool
+        """
+        case = [',','.',':',' ','?']
+        begin = 0
+        end = len(s) - 1
+        while begin != end:
+            while s[begin] in case:
+                begin += 1
+            while s[end] in case:
+                end -= 1
+            if s[begin] == s[end]:
+                begin += 1
+                end -= 1
+            else:
+                return False
+
+        return True
