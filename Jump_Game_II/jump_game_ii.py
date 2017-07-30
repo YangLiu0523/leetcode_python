@@ -4,40 +4,21 @@
 # Title:    Jump Game II
 # Author:   Dai Yuanzhen
 # Email:    yuanzhendai@gmail.com
-# Date:	    2017-07-24 22:38:55
+# Date:	    2017-07-30 16:09:56
 #
 class Solution(object):
-    def jump(self, nums, count=0):
-        """
-        :type nums: List[int]
-        :rtype: int
-        """
-        count = 0
-        while True:
-            if len(nums) == 1:
-                return count
-            if nums[0] == 1:
-                nums.pop(0)
-                count += 1
-                continue
-            if nums[0] + 1 >= len(nums):
-                nums = nums[-1:]
-                count += 1
-                continue
-
-            reachable = nums[1:nums[0]+1]
-            for i in range(len(reachable)):
-                reachable[i] += i
-            next_index = reachable.index(max(reachable)) + 1
-
-            if next_index >= len(nums):
-                return count + 1
-            nums = nums[next_index:]
-            count += 1
+    def jump(self, A):
+        ret = last = curr = 0
+        for i in range(len(A)):
+            print i, ret, last, curr
+            if i > last:
+                last = curr
+                ret += 1
+            curr = max(curr, i+A[i])
+        return ret
 
 
 if __name__ == '__main__':
-    test_case = [2, 3, 1, 1, 4]
-    # test_case = [1, 2, 3]
-    # test_case = [1, 2]
+    # test_case = [2, 3, 1, 1, 4]
+    test_case = [2, 3, 1, 1, 4, 2, 3, 1, 1, 4]
     print Solution().jump(test_case)
