@@ -9,7 +9,7 @@
 """
 Recursive Solution 
 
-Beats 98% 
+Beats 76.32% 
 """
 class Solution(object):
     def permute(self, nums):
@@ -17,10 +17,12 @@ class Solution(object):
         :type nums: List[int]
         :rtype: List[List[int]]
         """
-        if len(nums) <= 1:
+        if len(nums) == 1:
             return [nums]
-        result = []
-        for perm in self.permute(nums[1:]):
-            for i in xrange(len(perm) + 1):
-                result.append(perm[:i] + [nums[0]] + perm[i:])
-        return result
+
+        ret = []
+        for i in range(len(nums)):
+            nums_except_i = nums[:i] + nums[i+1:]
+            for j in self.permute(nums_except_i):
+                ret.append([nums[i]]+j)
+        return ret
