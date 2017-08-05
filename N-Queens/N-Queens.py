@@ -1,48 +1,40 @@
 import copy
 class Solution(object):
-    def nextNums(self,case,n):
-        index = case.index(".")
-        nums = []
-        for i in range(n):
-            flag = True
-            if str(i) in case:
-                flag = False
-            for j in range(index):
-                if i in [int(case[j]) - (index - j),int(case[j]) + (index - j)]:
-                    flag = False
-                    break
-            if flag:
-                nums.append(i)
-        return (index,nums)
-    
     def solveNQueens(self, n):
         """
         :type n: int
         :rtype: List[List[str]]
         """
-        result = []
-        new_result = []
-        for i in range(n):
-            result.append(str(i)+'.'*(n-1))
-        print result
-
-        index = 0
-        while index < n - 1:
-            for i in result:
-                index,nums = self.nextNums(i,n)
-                for j in nums:
-                    new_result.append(i[:index]+str(j)+'.'*(n-index-1))
-            result = copy.deepcopy(new_result)
-            new_result = []
-        format_result = []
-        for i in result:
-            format_case = []
-            for j in i:
-                format_case.append('.'*int(j)+'Q'+'.'*(n-int(j)-1))
-            format_result.append(format_case)
-
-        return format_result
+        init_case = [['x'] * n for _ in range(n)]
+        return [[''.join(j) for j in i] for i in self._solve([init_case], 0)]
+    
+    def _solve(self, cases, count):
+        if cases == [] or count >= len(cases[0]):
+            return cases
+        new_cases = []
+        for case in cases:
+            if not 'x' in case[count]:
+                continue
+            last = -1
+            for _ in xrange(case[count].count('x')):
+                last = case[count].index('x', last + 1)
+                new_cases.append(self._add(case, count, last))
+        return self._solve(new_cases, count+1)
         
-if __name__ == "__main__":
-    #print Solution().nextNums("13..")
-    print Solution().solveNQueens(1)
+    def _add(self, case, x, y):
+        new_case = copy.deepcopy(case)
+        new_case[x][y] = 'Q'
+        for i in xrange(len(new_case)):
+            if i != y:
+                new_case[x][i] = '.'
+            if i > x:
+                new_case[i][y] = '.'
+            if x + i < len(new_case) and y + i < len(new_case) and i != 0:
+                new_case[x+i][y+i] = '.'
+            if x + i < len(new_case) and y - i >= 0 and i != 0:
+                new_case[x+i][y-i] = '.'
+        return new_case
+
+
+if __name__ == '__main__':
+    print Solution().solveNQueens(2)
