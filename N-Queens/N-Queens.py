@@ -1,30 +1,30 @@
 class Solution(object):
     def solveNQueens(self, n):
         ret = []
-        for case in self._solve_by_3_list([[[-1] * n, [0] * n, [0] * n]], n, 0):
-            solution = ['' for _ in range(n)]
-            for i in range(n):
-                solution[case[0][i]] = '.' * i + 'Q' + '.' * (n - i - 1)
-            ret.append(solution)
+        queen_map = {1<<i: ('.' * i + 'Q' + '.' * (n - i - 1)) for i in range(n)}
+        ret = [[queen_map[i] for i in case[0]] for case in self._solve_by_3_list([[[], 0, 0, 0]], n)]
         return ret
 
-    def _solve_by_3_list(self, cases, div, n):
-        if cases == [] or div == n:
-            return cases
-        new_cases = []
-        for row, ld, rd in cases:
-            ld = ld[1:] + [0]
-            rd = [0] + rd[:-1]
-            for i in range(div):
-                if row[i] != -1 or ld[i] != 0 or rd[i] != 0:
-                    continue
-                new_cases.append([
-                    row[:i] + [n] + row[i+1:],
-                    ld[:i] + [1] + ld[i+1:],
-                    rd[:i] + [1] + rd[i+1:],
-                ])
-        return self._solve_by_3_list(new_cases, div, n+1)
+    def _solve_by_3_list(self, cases, div):
+        fil = (1 << div) - 1
+        for _ in range(div):
+            new_cases = []
+            for record, row, ld, rd in cases:
+                ld = (ld << 1) & fil
+                rd = rd >> 1
+                pos = (~(ld | rd | row)) & fil
+                while pos:
+                    p = pos & (~pos + 1)
+                    pos = pos - p
+                    new_cases.append([
+                        record + [p],
+                        row + p,
+                        ld + p,
+                        rd + p,
+                    ])
+            cases = new_cases
+        return cases
 
 
 if __name__ == '__main__':
-    print Solution().solveNQueens(9)
+    print Solution().solveNQueens(11)
