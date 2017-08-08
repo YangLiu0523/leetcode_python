@@ -15,7 +15,10 @@ class Solution(object):
         m = nums[0]
         m_now = nums[0]
         for i in nums[1:]:
-            m_now = max(m_now+i, i)
+            if m_now > 0:
+                m_now += i
+            else:
+                m_now = i
             if m_now > m:
                 m = m_now
         return m
