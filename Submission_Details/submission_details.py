@@ -20,17 +20,20 @@ class Solution(object):
         """
         if intervals == []:
             return []
-        
+
         def start_value(interval):
             return interval.start
-        
+
         intervals.sort(key=start_value)
-        
-        ret = [intervals.pop(0)]
-        while intervals != []:
-            now = intervals.pop(0)
-            if now.start <= ret[-1].end:
-                ret[-1].end = max(now.end, ret[-1].end)
+
+        ret = []
+        last_interval = intervals[0]
+        for interval in intervals:
+            if interval.start <= last_interval.end:
+                last_interval.end = max(interval.end, last_interval.end)
             else:
-                ret.append(now)
+                ret.append(last_interval)
+                last_interval = interval
+
+        ret.append(last_interval)
         return ret
