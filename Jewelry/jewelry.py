@@ -9,38 +9,57 @@
 class Jewelry(object):
     def howMany(self, values):
         values.sort()
-        solutions = [[[], []]]
-        ret = []
-        for jewelry in values:
-            new_solutions = []
-            for solution in solutions:
-                new_solutions.append([
-                    solution[0],
-                    solution[1] + [jewelry]
-                ])
-                if not solution[1] or jewelry <= solution[1][-1]:
-                    new_solutions.append([
-                        solution[0] + [jewelry],
-                        solution[1]
-                    ])
-            for solution in new_solutions:
-                if solution[0] and solution[1] and solution[0][-1] <= solution[1][0]:
-                    solutions.append(solution)
-                    if sum(solution[0]) == sum(solution[1]):
-                        ret.append(solution)
-            solutions = new_solutions + solutions
-        return len(ret)
+        width = sum(values)
+        # no_bob[value + width]
+        no_frank = [0] * (width * 2 + 1)
+        no_frank[0 + width] = 1
+        # yes_bob[value + width]
+        yes_frank = [0] * (width * 2 + 1)
+        temp_frank = [0] * (width * 2 + 1)
+        last_value = 0
+
+        for value in values:
+            new_no_frank = [0] * (2 * width + 1)
+            new_yes_frank = [0] * (2 * width + 1)
+            new_temp_frank = [0] * (width * 2 + 1)
+
+            for i in range(-width / 2, width / 2 + 1):
+                new_no_frank[i + width] += no_frank[i + width]
+                new_yes_frank[i + width] += yes_frank[i + width]
+                if last_value == value:
+                    new_temp_frank[i + width] += temp_frank[i + width]
+
+                if i + value <= width:
+                    new_no_frank[i + width] += no_frank[i + value + width]
+                    if last_value == value:
+                        new_yes_frank[i + width] += temp_frank[i + value + width]
+                        new_temp_frank[i + width] += temp_frank[i + value + width]
+
+                if i - value >= -width:
+                    new_yes_frank[i + width] += yes_frank[i - value + width]
+                    new_yes_frank[i + width] += no_frank[i - value + width]
+                    new_temp_frank[i + width] += no_frank[i - value + width]
+                    if last_value == value:
+                        new_temp_frank[i + width] += temp_frank[i - value + width]
+
+            no_frank = new_no_frank
+            yes_frank = new_yes_frank
+            temp_frank = new_temp_frank
+            last_value = value
+
+        return yes_frank[width]
 
 
 if __name__ == '__main__':
     # cases = [1, 2, 5, 3, 4, 5]
-    cases = [1, 2, 3, 4, 5, 5]
-    # cases = [
-        # 1000, 1000, 1000, 1000, 1000,
-        # 1000, 1000, 1000, 1000, 1000,
-        # 1000, 1000, 1000, 1000, 1000,
-        # 1000, 1000, 1000, 1000, 1000,
-        # 1000, 1000, 1000, 1000, 1000,
-        # 1000, 1000, 1000, 1000, 1000,
-    # ]
+    # cases = [1, 2, 3, 4, 5, 5]
+    # cases = [7, 7, 8, 9, 10, 11, 1, 2, 2, 3, 4, 5, 6]
+    cases = [
+        1000, 1000, 1000, 1000, 1000,
+        1000, 1000, 1000, 1000, 1000,
+        1000, 1000, 1000, 1000, 1000,
+        1000, 1000, 1000, 1000, 1000,
+        1000, 1000, 1000, 1000, 1000,
+        1000, 1000, 1000, 1000, 1000,
+    ]
     print Jewelry().howMany(cases)
