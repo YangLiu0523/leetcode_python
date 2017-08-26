@@ -19,17 +19,17 @@ class Solution(object):
         :type k: int
         :rtype: ListNode
         """
+        if head is None:
+            return None
+
         index = end = head
-        length = 0
-        while index != None:
+        length = 1
+        while index.next != None:
             length += 1
-            if index.next == None:
-                end = index
-                index.next = head
-                index = None
-            else:
-                index = index.next
-        
+            index = index.next
+        end = index
+        index.next = head
+
         ret = head
         k = length - (k % length if length != 0 else 0)
         for i in range(k):
