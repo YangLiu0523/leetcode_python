@@ -13,10 +13,8 @@ class Solution(object):
         :type b: str
         :rtype: str
         """
-        if len(a) > len(b):
-            b = '0' * (len(a) - len(b)) + b
-        else:
-            a = '0' * (len(b) - len(a)) + a
+        b = '0' * (len(a) - len(b)) + b
+        a = '0' * (len(b) - len(a)) + a
         
         flag = '0'
         ret = ''
