@@ -21,16 +21,18 @@ class Solution(object):
 
         for i in range(1, l1 + 1):
             for j in range(1, l2 + 1):
-                case = 0 if word1[i-1] == word2[j-1] else 1
-                table[i][j] = min(
-                    table[i-1][j] + 1,
-                    table[i][j-1] + 1,
-                    table[i-1][j-1] + case
-                )
+                if word1[i-1] == word2[j-1]:
+                    table[i][j] = table[i-1][j-1]
+                else:
+                    table[i][j] = 1 + min(
+                        table[i-1][j],
+                        table[i][j-1],
+                        table[i-1][j-1]
+                    )
         return table[-1][-1]
 
 
 if __name__ == '__main__':
-    word1 = "ab"
-    word2 = "bc"
+    word1 = "dinitrophenylhydrazinedinitrophenylhydrazinedinitrophenylhydrazinedinitrophenylhydrazine"
+    word2 = "acetylphenylhydrazineacetylphenylhydrazineacetylphenylhydrazineacetylphenylhydrazine"
     print Solution().minDistance(word1, word2)
