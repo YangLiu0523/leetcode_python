@@ -13,22 +13,24 @@ class Solution(object):
         :type word2: str
         :rtype: int
         """
-        if len(word1) == 0 or len(word2) == 0:
-            return len(word1 + word2)
-        if word1 == word2:
-            return 0
+        l1, l2 = len(word1), len(word2)
+        table = [[-1] * (l2 + 1) for _ in range(l1 + 1)]
+        table[0] = range(l2 + 1)
+        for i in range(l1 + 1):
+            table[i][0] = i
 
-        if word1[0] == word2[0]:
-            return self.minDistance(word1[1:], word2[1:])
-        else:
-            return 1 + min(
-                self.minDistance(word1[1:], word2),
-                self.minDistance(word1, word2[1:]),
-                self.minDistance(word1[1:], word2[1:])
-            )
+        for i in range(1, l1 + 1):
+            for j in range(1, l2 + 1):
+                case = 0 if word1[i-1] == word2[j-1] else 1
+                table[i][j] = min(
+                    table[i-1][j] + 1,
+                    table[i][j-1] + 1,
+                    table[i-1][j-1] + case
+                )
+        return table[-1][-1]
 
 
 if __name__ == '__main__':
-    word1 = "dinitrophenylhydrazine"
-    word2 = "acetylphenylhydrazine"
+    word1 = "ab"
+    word2 = "bc"
     print Solution().minDistance(word1, word2)
