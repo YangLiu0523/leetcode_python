@@ -8,19 +8,13 @@
 #
 class Solution(object):
     def setZeroes(self, matrix):
-        """
-        :type matrix: List[List[int]]
-        :rtype: void Do not return anything, modify matrix in-place instead.
-        """
-        rows = []
-        columns = []
-        for row, index_row in zip(matrix, range(len(matrix))):
-            for value, index_column in zip(row, range(len(matrix[0]))):
-                if value == 0:
-                    rows.append(index_row)
-                    columns.append(index_column)
-        rows = set(rows)
-        columns = set(columns)
+        rows = set()
+        columns = set()
+        for index_row in range(len(matrix)):
+            for index_column in range(len(matrix[0])):
+                if matrix[index_row][index_column] == 0:
+                    rows.add(index_row)
+                    columns.add(index_column)
 
         for i in rows:
             for j in range(len(matrix[0])):
