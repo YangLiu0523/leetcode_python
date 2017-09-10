@@ -19,25 +19,27 @@ class Solution(object):
                 mark[i] += 1
             else:
                 mark[i] = 1
-        
+
         ret = ''
         start = end = 0
+        count = len(mark)
         while start < len(s) and end <= len(s):
             #: flag is True if s[start:end] contains T
-            flag = True
-            for i in mark.values():
-                if i > 0:
-                    flag = False
-        
-            if flag and (not ret or len(ret) > len(s[start:end])):
+            flag = count == 0
+
+            if flag and (not ret or len(ret) > end - start):
                 ret = s[start:end]
-            
+
             if flag:
                 if s[start] in mark:
                     mark[s[start]] += 1
+                    if mark[s[start]] == 1:
+                        count += 1
                 start += 1
             else:
                 if end < len(s) and s[end] in mark:
                     mark[s[end]] -= 1
+                    if mark[s[end]] == 0:
+                        count -= 1
                 end += 1
         return ret
