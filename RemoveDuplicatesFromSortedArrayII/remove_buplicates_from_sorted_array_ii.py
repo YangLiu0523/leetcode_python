@@ -13,19 +13,17 @@ class Solution(object):
         :rtype: int
         """
         t, count = None, 0
-        ret = 0
 
         i = 0
         while i < len(nums):
             if nums[i] == t:
                 count += 1
+                if count >= 3:
+                    del nums[i]
+                    i -= 1
             else:
                 t = nums[i]
                 count = 1
-            if count < 3:
-                ret += 1
-                i += 1
-            else:
-                del nums[i]
+            i += 1
 
-        return ret
+        return len(nums)
