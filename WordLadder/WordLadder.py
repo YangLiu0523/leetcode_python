@@ -3,6 +3,9 @@
 # 
 # Date: 2017-12-12 13:41:33
 # 
+import string
+
+
 class Solution(object):
     def ladderLength(self, beginWord, endWord, wordList):
         """
@@ -11,46 +14,30 @@ class Solution(object):
         :type wordList: List[str]
         :rtype: int
         """
-        wordDict = {w:[] for w in wordList}
-        wordDict[beginWord] = []
-        for i1 in range(len(wordList)-1):
-            for i2 in range(i1+1, len(wordList)):
-                if self._similar(wordList[i1], wordList[i2]):
-                    wordDict[wordList[i1]].append(wordList[i2])
-                    wordDict[wordList[i2]].append(wordList[i1])
-        for i2 in range(len(wordList)):
-            if self._similar(wordList[i2], beginWord):
-                wordDict[beginWord].append(wordList[i2])
+        queue = [beginWord]
+        visited = set()
+        wordSet = set(wordList)
+        level = 1
 
-        prev = [beginWord]
-        result = {}
-        step = 1
-        while prev:
-            new_prev = []
-            for w in prev:
-                if w == endWord:
-                    return step
-                for w_next in wordDict[w]:
-                    if w_next not in result:
-                        result[w_next] = step + 1
-                        new_prev.append(w_next)
-            prev = new_prev
-            step += 1
+        while queue:
+            level += 1
+            new_queue = []
+            for w in queue:
+                for index in range(len(beginWord)):
+                    for c in string.lowercase:
+                        temp = w[:index] + c + w[index+1:]
 
+                        if temp in wordSet and temp not in visited:
+                            if temp == endWord:
+                                return level
+                            new_queue.append(temp)
+                            visited.add(temp)
+            queue = new_queue
         return 0
 
 
-    def _similar(self, s1, s2):
-        if len(s1) != len(s2):
-            return False
-        flag = False
-        for i in xrange(len(s1)):
-            if s1[i] == s2[i]:
-                continue
-            if not flag:
-                flag = True
-            else:
-                return False
-        return True
-
-
+if __name__ == '__main__':
+    b = "hit"
+    e = "cog"
+    l = ["hot","dot","dog","lot","log"]
+    print Solution().ladderLength(b, e, l)
