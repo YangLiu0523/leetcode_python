@@ -17,9 +17,10 @@ class Solution:
         :type prerequisites: List[List[int]]
         :rtype: bool
         """
-        graph = defaultdict(list)
+        requisites = defaultdict(list)
         for a, b in prerequisites:
-            graph[a].append(b)
+            requisites[a].append(b)
+        # Skip taken_course
         taken_course = [False] * numCourses
 
         def dfs(course):
@@ -29,10 +30,9 @@ class Solution:
 
             if course in visited:
                 return False
-            else:
-                visited.add(course)
+            visited.add(course)
 
-            for req in graph[course]:
+            for req in requisites[course]:
                 if taken_course[req]:
                     continue
                 if not dfs(req):
@@ -42,7 +42,7 @@ class Solution:
             return True
 
         for course in range(numCourses):
-            visited = set()
+            visited = set()     # Visited in this traversing
             if not dfs(course):
                 return False
 
